@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hiwinrobot-14-creation", "hiwinrobot-14-creation\hiwinrobot-14-creation.csproj", "{335C7E45-C9C8-43F2-8687-A0247FF36B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerlerBeadsHandler", "PerlerBeadsHandler\PerlerBeadsHandler.csproj", "{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{335C7E45-C9C8-43F2-8687-A0247FF36B51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{335C7E45-C9C8-43F2-8687-A0247FF36B51}.Release|x64.ActiveCfg = Release|x64
 		{335C7E45-C9C8-43F2-8687-A0247FF36B51}.Release|x64.Build.0 = Release|x64
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{6FB7EBE4-ADB5-48D2-B2D8-7127A0D952F5}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
