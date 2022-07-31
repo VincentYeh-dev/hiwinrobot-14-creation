@@ -11,7 +11,7 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
-namespace PerlerBeadsHandler
+namespace PerlerBeads
 {
     public static class VisualSystem
     {

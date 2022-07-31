@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RASDK.Basic;
 
-namespace PerlerBeadsHandler
+namespace PerlerBeads
 {
     public static class PegBoardFactory
     {

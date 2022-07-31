@@ -13,7 +13,7 @@ using Hiwin = RASDK.Arm.Hiwin;
 using MotionParam = RASDK.Arm.AdditionalMotionParameters;
 using Motion = RASDK.Arm.RoboticArmMotion;
 
-namespace PerlerBeadsHandler
+namespace PerlerBeads
 {
     public class PerlerBeadsHandler
     {
@@ -64,7 +64,6 @@ namespace PerlerBeadsHandler
 
         public void Run()
         {
-            DisposGripper();
             CloseGripper();
             OpenGripper();
 
@@ -72,13 +71,13 @@ namespace PerlerBeadsHandler
             {
                 for (int y = 0; y < _modelBoard.Size.Height; y++)
                 {
-                    PutBead(new Point(x, y));
+                    HandleTheBead(new Point(x, y));
                 }
             }
             DisposGripper();
         }
 
-        private void PutBead(Point modelGrid)
+        private void HandleTheBead(Point modelGrid)
         {
             var modelBead = _modelBoard.GetBead(modelGrid);
             if (modelBead == null)
@@ -105,16 +104,16 @@ namespace PerlerBeadsHandler
             _messageHanlder.Log($"執行：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
 
             //PickBead(storeGrid);
-            PickBeadTest();
+            TakeBeadTest();
             _storeBoard.RemoveBead(storeGrid);
 
-            PlaceBead(modelGrid);
+            PutBead(modelGrid);
             _goalBoard.PutBead(modelGrid, modelBead, true);
 
             _messageHanlder.Log($"完成：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
         }
 
-        private void PickBeadTest()
+        private void TakeBeadTest()
         {
             var goalPosition = Hiwin.Default.DescartesHomePosition;
             goalPosition[2] = _pickUpperZ + 30;
@@ -128,7 +127,7 @@ namespace PerlerBeadsHandler
             _messageHanlder.Show("Pick a bead B.");
         }
 
-        private void PickBead(Point grid)
+        private void TakeBead(Point grid)
         {
             var beadRealPos = _storeBoard.GetRealPosition(grid);
 
@@ -155,7 +154,7 @@ namespace PerlerBeadsHandler
             _arm.MoveRelative(0, 0, -_pickDownZ, 0, 0, 0, mp);
         }
 
-        private void PlaceBead(Point grid)
+        private void PutBead(Point grid)
         {
             var beadRealPos = _goalBoard.GetRealPosition(grid);
 
