@@ -27,8 +27,47 @@ namespace hiwinrobot_14_creation
 
         private void DoCalibrate()
         {
-            _cameraParameter = VisualSystem.CameraCalibration(out var error);
+            _cameraParameter = VisualSystem.CameraCalibration(null, out var error);
             _messageHandler.Log($"Reprojection error: {error}.", LoggingLevel.Info);
+        }
+
+        private void Positioning()
+        {
+            VisualSystem.Positioning(_camera);
+        }
+
+        private void CameraConnect()
+        {
+            var ok = _camera.Connect();
+            if (!ok)
+            {
+                _messageHandler.Show("Can't connect to camera.");
+                return;
+            }
+            _camera.LoadParameterFromEEPROM();
+        }
+
+        private void CameraDisconnect()
+        {
+            _camera.Disconnect();
+        }
+
+        private void VisualServoing()
+        {
+            CameraConnect();
+
+            var p = Hiwin.Default.DescartesHomePosition;
+            p[2] = 230.33;
+            _arm.MoveAbsolute(p);
+
+            double kp = (20.0 / 130.0) * 0.75; // mm per pixel * gain.
+            var error = VisualSystem.VisualServoing(_arm, _camera, kp, 4, 10);
+            _messageHandler.Log($"Visual servoing error: {error.X}, {error.Y}.", LoggingLevel.Info);
+
+            var img = _camera.GetImage();
+            img.Save("visual_servoing_done.jpg");
+
+            CameraDisconnect();
         }
 
         private void CreatePerlerBeads()

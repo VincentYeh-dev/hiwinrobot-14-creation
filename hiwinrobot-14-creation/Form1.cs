@@ -40,6 +40,8 @@ namespace hiwinrobot_14_creation
         {
             _actions.Clear();
             _actions.Add("Test", TestAction);
+            _actions.Add("定位", Positioning);
+            _actions.Add("VS", VisualServoing);
             _actions.Add("移動到相機標定的位置", MoveToCalibrate);
             _actions.Add("進行相機標定", DoCalibrate);
             _actions.Add("進行拼豆", CreatePerlerBeads);
@@ -114,6 +116,8 @@ namespace hiwinrobot_14_creation
 
         #region Form
 
+        private readonly RASDK.Vision.IDS.IDSCamera _camera;
+
         private readonly Hiwin.RoboticArm _arm;
 
         private readonly MessageHandler _messageHandler;
@@ -130,6 +134,7 @@ namespace hiwinrobot_14_creation
             var logHandler = new GeneralLogHandler();
             _messageHandler = new GeneralMessageHandler(logHandler);
             _arm = new Hiwin.RoboticArm(_messageHandler, _armIp);
+            _camera = new RASDK.Vision.IDS.IDSCamera(_messageHandler);
             _beadsHandler = new PerlerBeads.PerlerBeadsHandler(_arm, _messageHandler);
 
             // Init Actions.
