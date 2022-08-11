@@ -52,6 +52,11 @@ namespace hiwinrobot_14_creation
             _camera.Disconnect();
         }
 
+        private void Homing()
+        {
+            _arm.Homing();
+        }
+
         private void VisualServoing()
         {
             CameraConnect();
@@ -61,7 +66,7 @@ namespace hiwinrobot_14_creation
             _arm.MoveAbsolute(p);
 
             double kp = (20.0 / 130.0) * 0.8; // mm per pixel * gain.
-            var error = VisualSystem.VisualServoing(_arm, _camera, kp, 4, 10);
+            var error = VisualSystem.VisualServoing(_arm, _camera, kp, 4, -1);
             _messageHandler.Log($"Visual servoing error: {error.X}, {error.Y}.", LoggingLevel.Info);
 
             var img = _camera.GetImage();

@@ -158,73 +158,26 @@ namespace PerlerBeads
 
         public static PointF VisualServoing(RoboticArm arm, IDSCamera camera, double kp, double allowableError, double timeout)
         {
-            var error = new PointF(float.NaN, float.NaN);
-
-            var timerCount = 0.0;
-            var timer = new Timer(100);
-
-            if (timeout >= 0)
+            var lastPixel = new PointF();
+            Func<PointF> getCurrentPixelFunc = () =>
             {
-                timer.Stop();
-                timer.Elapsed += (s, e) => { timerCount += 0.1; };
-                timer.Start();
-            }
-            while (timerCount < timeout || timeout < 0)
-            {
-                try
+                var image = ReadImageFromCamera(camera);
+
+                var arucoCorners = FindArucoCorners(image, 0);
+                if (arucoCorners != null)
                 {
-                    error = VisualServoingInterative(arm, camera, kp);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{ex.Message}");
+                    lastPixel = arucoCorners[0];
                 }
 
-                if (Math.Abs(error.X) <= allowableError &&
-                    Math.Abs(error.Y) <= allowableError &&
-                    timeout >= 0)
-                {
-                    break;
-                }
-            }
-            timer.Stop();
+                Console.WriteLine($"Pixel: {lastPixel.X}, {lastPixel.Y}.");
 
-            return error;
-        }
-
-        public static PointF VisualServoingInterative(RoboticArm arm, IDSCamera camera, double kp)
-        {
-            var image = ReadImageFromCamera(camera);
-            var arucoCorners = FindArucoCorners(image, 0);
-            if (arucoCorners == null)
-            {
-                throw new Exception($"Con't find ArUco id: {0}.");
-            }
-
-            // Calc error in pixel.
-            var imageCenter = new Point((image.Size.Width / 2) - 1, (image.Size.Height / 2) - 1);
-            var errorX = arucoCorners[0].X - imageCenter.X;
-            var errorY = arucoCorners[0].Y - imageCenter.Y;
-
-            // P control.
-            var position = new double[]
-            {
-                kp * errorX,
-                kp * -errorY,
-                0,
-
-                0,
-                0,
-                0
+                return lastPixel;
             };
-            var motionParam = new AdditionalMotionParameters
-            {
-                MotionType = RASDK.Arm.Type.MotionType.Linear,
-                NeedWait = true
-            };
-            arm.MoveRelative(position, motionParam);
 
-            return new PointF(errorX, errorY);
+            var img = ReadImageFromCamera(camera);
+
+            var armMoveFunc = VisualServo.BasicArmMoveFunc(arm, kp);
+            return VisualServo.Tracking(img.Size, timeout, getCurrentPixelFunc, armMoveFunc, allowableError);
         }
 
         public static Image<Bgr, byte> ReadImageFromCamera(IDSCamera camera)

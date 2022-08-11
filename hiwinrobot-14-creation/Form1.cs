@@ -40,6 +40,7 @@ namespace hiwinrobot_14_creation
         {
             _actions.Clear();
             _actions.Add("Test", TestAction);
+            _actions.Add("Homing", Homing);
             _actions.Add("定位", Positioning);
             _actions.Add("VS", VisualServoing);
             _actions.Add("移動到相機標定的位置", MoveToCalibrate);
