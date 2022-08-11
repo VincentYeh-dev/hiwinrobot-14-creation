@@ -175,8 +175,10 @@ namespace PerlerBeads
                 {
                     error = VisualServoingInterative(arm, camera, kp);
                 }
-                catch
-                { }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
 
                 if (Math.Abs(error.X) <= allowableError &&
                     Math.Abs(error.Y) <= allowableError &&
@@ -215,12 +217,12 @@ namespace PerlerBeads
                 0,
                 0
             };
-            arm.MoveRelative(position,
-                             new AdditionalMotionParameters
-                             {
-                                 MotionType = RASDK.Arm.Type.MotionType.Linear,
-                                 NeedWait = true
-                             });
+            var motionParam = new AdditionalMotionParameters
+            {
+                MotionType = RASDK.Arm.Type.MotionType.Linear,
+                NeedWait = true
+            };
+            arm.MoveRelative(position, motionParam);
 
             return new PointF(errorX, errorY);
         }

@@ -60,7 +60,7 @@ namespace hiwinrobot_14_creation
             p[2] = 230.33;
             _arm.MoveAbsolute(p);
 
-            double kp = (20.0 / 130.0) * 0.75; // mm per pixel * gain.
+            double kp = (20.0 / 130.0) * 0.8; // mm per pixel * gain.
             var error = VisualSystem.VisualServoing(_arm, _camera, kp, 4, 10);
             _messageHandler.Log($"Visual servoing error: {error.X}, {error.Y}.", LoggingLevel.Info);
 
