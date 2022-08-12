@@ -36,7 +36,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonActionRunAll = new System.Windows.Forms.Button();
-            this.buttonActionRunFromHere = new System.Windows.Forms.Button();
+            this.buttonActionRunSelected = new System.Windows.Forms.Button();
             this.buttonActionDoOnce = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -82,7 +82,6 @@
             this.listViewActions.GridLines = true;
             this.listViewActions.HideSelection = false;
             this.listViewActions.Location = new System.Drawing.Point(6, 24);
-            this.listViewActions.MultiSelect = false;
             this.listViewActions.Name = "listViewActions";
             this.listViewActions.Size = new System.Drawing.Size(357, 273);
             this.listViewActions.TabIndex = 2;
@@ -102,7 +101,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.buttonActionRunAll);
-            this.groupBox2.Controls.Add(this.buttonActionRunFromHere);
+            this.groupBox2.Controls.Add(this.buttonActionRunSelected);
             this.groupBox2.Controls.Add(this.buttonActionDoOnce);
             this.groupBox2.Controls.Add(this.listViewActions);
             this.groupBox2.Location = new System.Drawing.Point(133, 12);
@@ -122,15 +121,15 @@
             this.buttonActionRunAll.UseVisualStyleBackColor = true;
             this.buttonActionRunAll.Click += new System.EventHandler(this.buttonActionRunAll_Click);
             // 
-            // buttonActionRunFromHere
+            // buttonActionRunSelected
             // 
-            this.buttonActionRunFromHere.Location = new System.Drawing.Point(127, 303);
-            this.buttonActionRunFromHere.Name = "buttonActionRunFromHere";
-            this.buttonActionRunFromHere.Size = new System.Drawing.Size(115, 30);
-            this.buttonActionRunFromHere.TabIndex = 3;
-            this.buttonActionRunFromHere.Text = "Run from Here";
-            this.buttonActionRunFromHere.UseVisualStyleBackColor = true;
-            this.buttonActionRunFromHere.Click += new System.EventHandler(this.buttonActionRunFromHere_Click);
+            this.buttonActionRunSelected.Location = new System.Drawing.Point(127, 303);
+            this.buttonActionRunSelected.Name = "buttonActionRunSelected";
+            this.buttonActionRunSelected.Size = new System.Drawing.Size(115, 30);
+            this.buttonActionRunSelected.TabIndex = 3;
+            this.buttonActionRunSelected.Text = "Run Selected";
+            this.buttonActionRunSelected.UseVisualStyleBackColor = true;
+            this.buttonActionRunSelected.Click += new System.EventHandler(this.buttonActionRunSelected_Click);
             // 
             // buttonActionDoOnce
             // 
@@ -168,7 +167,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button buttonActionDoOnce;
         private System.Windows.Forms.Button buttonActionRunAll;
-        private System.Windows.Forms.Button buttonActionRunFromHere;
+        private System.Windows.Forms.Button buttonActionRunSelected;
     }
 }
 

@@ -9,45 +9,22 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PerlerBeads;
 using RASDK.Arm;
+using RASDK.Arm.Hiwin;
 using RASDK.Arm.Type;
 using RASDK.Basic;
 using RASDK.Basic.Message;
+
 using Hiwin = RASDK.Arm.Hiwin;
+
 using MotionParam = RASDK.Arm.AdditionalMotionParameters;
 
 namespace hiwinrobot_14_creation
 {
     public partial class Form1 : Form
     {
-        #region config
-
-        private readonly string _armIp = "192.168.0.1";
-
-        #endregion config
-
-        #region Positions
-
-        private double[] _testPosition => new double[] { };
-        private double[] _calibratePosition => new double[] { };
-
-        #endregion Positions
-
         #region Actions
 
         private readonly Dictionary<string, Action> _actions = new Dictionary<string, Action>();
-
-        private void OrganizeActions()
-        {
-            _actions.Clear();
-            _actions.Add("Test", TestAction);
-            _actions.Add("Homing", Homing);
-            _actions.Add("定位", Positioning);
-            _actions.Add("VS", VisualServoing);
-            _actions.Add("移動到相機標定的位置", MoveToCalibrate);
-            _actions.Add("進行相機標定", DoCalibrate);
-            _actions.Add("進行拼豆", CreatePerlerBeads);
-            _actions.Add("End", () => { _messageHandler.Show("所有動作已結束。"); });
-        }
 
         private void UpdateActionsListView()
         {
@@ -66,18 +43,36 @@ namespace hiwinrobot_14_creation
             }
         }
 
-        private void DoAction(int index)
+        private bool DoAction(int index)
         {
-            var action = listViewActions.Items[index].Tag as Action;
+            var item = listViewActions.Items[index];
+            var action = item.Tag as Action;
+            var name = item.SubItems[1].Text;
+
+            _messageHandler.Log($"Do action: {name}, index: {index}.", LoggingLevel.Trace);
+
+            if (name == "ABORT")
+            {
+                return true;
+            }
+
             action();
+
+            _messageHandler.Log($"Action done: {name}, index: {index}.", LoggingLevel.Trace);
+            return false;
         }
 
-        private void DoAction(int startIndex, int endIndex)
+        private bool DoAction(int startIndex, int endIndex)
         {
             for (int i = startIndex; i <= endIndex; i++)
             {
-                DoAction(i);
+                var abort = DoAction(i);
+                if (abort)
+                {
+                    return true;
+                }
             }
+            return false;
         }
 
         private void buttonActionRunAll_Click(object sender, EventArgs e)
@@ -86,11 +81,17 @@ namespace hiwinrobot_14_creation
             DoAction(0, actionsCount - 1);
         }
 
-        private void buttonActionRunFromHere_Click(object sender, EventArgs e)
+        private void buttonActionRunSelected_Click(object sender, EventArgs e)
         {
-            var startIndex = listViewActions.SelectedItems[0].Index;
-            var actionsCount = listViewActions.Items.Count;
-            DoAction(startIndex, actionsCount - 1);
+            var selectedItem = listViewActions.SelectedItems;
+            foreach (ListViewItem item in selectedItem)
+            {
+                var abort = DoAction(item.Index);
+                if (abort)
+                {
+                    break;
+                }
+            }
         }
 
         private void buttonActionDoOnce_Click(object sender, EventArgs e)
@@ -139,6 +140,7 @@ namespace hiwinrobot_14_creation
             _beadsHandler = new PerlerBeads.PerlerBeadsHandler(_arm, _messageHandler);
 
             // Init Actions.
+            _actions.Clear();
             OrganizeActions();
             UpdateActionsListView();
         }
