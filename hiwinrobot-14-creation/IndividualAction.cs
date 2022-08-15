@@ -45,12 +45,9 @@ namespace hiwinrobot_14_creation
         #region Variables
 
         private readonly string _armIp = @"192.168.0.1";
-
+        private readonly float _distanceOfCameraAndEndEffector = 110;
+        private readonly int _armInitSpeed = 20;
         private PointF _worldOffset = new PointF(0, -50);
-
-        private float _distanceOfCameraAndEndEffector = 110;
-
-        private int _armInitSpeed = 20;
 
         #region Positions
 
