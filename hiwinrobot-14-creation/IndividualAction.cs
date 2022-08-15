@@ -48,11 +48,13 @@ namespace hiwinrobot_14_creation
 
         private PointF _worldOffset = new PointF(0, -50);
 
+        private float _distanceOfCameraAndEndEffector = 110;
+
+        private int _armInitSpeed = 20;
+
         #region Positions
 
         private double[] _pegboardOriginPosition = new double[6];
-
-        public double[] PegboardOriginPosition => _pegboardOriginPosition;
 
         private double[] _testPosition => new double[] { };
 
@@ -60,7 +62,7 @@ namespace hiwinrobot_14_creation
         {
             get
             {
-                var pos = Hiwin.Default.DescartesHomePosition;
+                var pos = Hiwin.Default.DescartesHomePosition.Clone() as double[];
                 pos[2] = 230.336; // Z.
                 return pos;
             }
@@ -77,14 +79,14 @@ namespace hiwinrobot_14_creation
 
         private void MoveToPegboardOrigin()
         {
-            _arm.MoveAbsolute(PegboardOriginPosition);
+            _arm.MoveAbsolute(_pegboardOriginPosition);
         }
 
         private void MoveDown()
         {
-            var pos = PegboardOriginPosition;
+            var pos = _pegboardOriginPosition.Clone() as double[];
             pos[2] = 5;
-            _arm.MoveAbsolute(pos);
+            _arm.MoveAbsolute(pos, new MotionParam { MotionType = RASDK.Arm.Type.MotionType.Linear });
         }
 
         private void CameraConnect()
@@ -105,18 +107,22 @@ namespace hiwinrobot_14_creation
 
         private void VisualServoing()
         {
-            double kp = (20.0 / 130.0) * 0.8; // mm per pixel * gain.
-            var error = VisualSystem.VisualServoing(_arm, _camera, kp, 4, 35);
+            var arucoId = 1;
+            var timeout = 20;
+            var allowableError = 4;
+            var kp = (20.0 / 130.0) * 0.8; // mm per pixel * gain.
+
+            var error = VisualSystem.VisualServoing(_arm, _camera, kp, allowableError, timeout, arucoId);
 
             var image = _camera.GetImage();
             image.Save("visual_servoing_done.jpg");
 
-            var arucoCorners = VisualSystem.FindArucoCorners(image.ToImage<Bgr, byte>(), 1);
+            var arucoCorners = VisualSystem.FindArucoCorners(image.ToImage<Bgr, byte>(), arucoId);
             var arucoAngle = VisualSystem.CalcArucoAngle(arucoCorners);
 
             var presentPosition = _arm.GetNowPosition();
             var presentPoint = new PointF((float)presentPosition[0], (float)presentPosition[1]);
-            var centerPoint = new PointF(presentPoint.X, presentPoint.Y + 110);
+            var centerPoint = new PointF(presentPoint.X, presentPoint.Y + _distanceOfCameraAndEndEffector);
 
             var pegboardOrigin = VisualSystem.CalcPositionWithOffset(-arucoAngle, _worldOffset, presentPoint, centerPoint);
             _pegboardOriginPosition = _capturePosition;

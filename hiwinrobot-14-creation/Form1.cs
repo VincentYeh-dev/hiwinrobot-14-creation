@@ -107,6 +107,7 @@ namespace hiwinrobot_14_creation
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             _arm.Connect();
+            _arm.Speed = _armInitSpeed;
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)

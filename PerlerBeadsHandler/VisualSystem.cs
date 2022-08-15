@@ -40,78 +40,29 @@ namespace PerlerBeads
             return new PointF((float)rotatedPoint[0, 0], (float)rotatedPoint[1, 0]);
         }
 
-        public static void VisualServoArmMoving(RoboticArm arm, PointF errorPixel, double kp, bool invertedX = false, bool invertedY = true)
+        public static PointF VisualServoing(RoboticArm arm,
+                                            IDSCamera camera,
+                                            double kp,
+                                            double allowableError,
+                                            double timeout,
+                                            int arucoId)
         {
-            // Proportional control.
-            var armPosition = new double[]
-            {
-                    kp * errorPixel.X,
-                    kp * errorPixel.Y,
-                    0
-            };
+            var sampleImage = ReadImageFromCamera(camera);
 
-            if (invertedX)
-            {
-                armPosition[0] *= -1;
-            }
-            if (invertedY)
-            {
-                armPosition[1] *= -1;
-            }
+            Func<PointF> getPixelFunc =
+                VisualServo.MakeBasicArucoGetCurrentPixelFunc(camera,
+                                                              arucoId,
+                                                              new Dictionary(
+                                                                  Dictionary.PredefinedDictionaryName.Dict4X4_50),
+                                                              DetectorParameters.GetDefault());
+            Action<PointF> armMoveFunc = VisualServo.MakeBasicArmMoveFunc(arm, kp);
 
-            var motionParam = new AdditionalMotionParameters
-            {
-                MotionType = RASDK.Arm.Type.MotionType.Linear,
-                CoordinateType = RASDK.Arm.Type.CoordinateType.Descartes,
-                NeedWait = true
-            };
+            var error = VisualServo.Tracking(sampleImage.Size,
+                                             timeout,
+                                             getPixelFunc,
+                                             armMoveFunc,
+                                             allowableError);
 
-            arm.MoveRelative(armPosition, motionParam);
-        }
-
-        public static PointF VisualServoing(RoboticArm arm, IDSCamera camera, double kp, double allowableError, double timeout)
-        {
-            var error = new PointF(float.NaN, float.NaN);
-
-            var timerCount = 0.0;
-            var timer = new Timer(100);
-            if (timeout >= 0)
-            {
-                timer.Stop();
-                timer.Elapsed += (s, e) => { timerCount += 0.1; };
-                timer.Start();
-            }
-
-            // Interative.
-            while (timerCount < timeout || timeout < 0)
-            {
-                var image = ReadImageFromCamera(camera);
-                var goalPixel = new PointF((image.Size.Width / 2) - 1, (image.Size.Height / 2) - 1);
-
-                var arucoCorners = FindArucoCorners(image, 1);
-                if (arucoCorners == null)
-                {
-                    continue;
-                }
-
-                error = new PointF
-                {
-                    X = arucoCorners[0].X - goalPixel.X,
-                    Y = arucoCorners[0].Y - goalPixel.Y
-                };
-
-                // Arm moving.
-                VisualServoArmMoving(arm, error, kp);
-
-                if (Math.Abs(error.X) <= allowableError &&
-                    Math.Abs(error.Y) <= allowableError &&
-                    timeout >= 0)
-                {
-                    break;
-                }
-            }
-
-            timer.Stop();
             return error;
         }
 
@@ -143,22 +94,25 @@ namespace PerlerBeads
                                       ids,
                                       DetectorParameters.GetDefault());
 
-            var goalCorner = new PointF[4];
             var idsArray = ids.ToArray();
             for (int i = 0; i < idsArray.Length; i++)
             {
                 if (ids[i] == id)
                 {
                     var c = corners.ToArrayOfArray();
-                    goalCorner[0] = c[i][0];
-                    goalCorner[1] = c[i][1];
-                    goalCorner[2] = c[i][2];
-                    goalCorner[3] = c[i][3];
+                    var goalCorner = new PointF[]
+                    {
+                        c[i][0],
+                        c[i][1],
+                        c[i][2],
+                        c[i][3]
+                    };
 
                     return goalCorner;
                 }
             }
 
+            // Not found.
             return null;
         }
     }
