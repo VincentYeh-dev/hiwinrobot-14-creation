@@ -114,6 +114,7 @@ namespace hiwinrobot_14_creation
             var image = _camera.GetImage();
             image.Save("visual_servoing_done.jpg");
 
+            // Calc the angle of ArUco.
             var arucoCorners = VisualSystem.FindArucoCorners(image.ToImage<Bgr, byte>(), arucoId);
             var arucoAngle = VisualSystem.CalcArucoAngle(arucoCorners);
 
@@ -122,6 +123,7 @@ namespace hiwinrobot_14_creation
             var centerPoint = new PointF(presentPoint.X + _cameraAndEndEffectorOffset.X,
                                          presentPoint.Y + _cameraAndEndEffectorOffset.Y);
 
+            // Rotation.
             var pegboardOrigin = VisualSystem.CalcPositionWithOffset(-arucoAngle, _worldOffset, presentPoint, centerPoint);
             _pegboardOriginPosition = _capturePosition;
             _pegboardOriginPosition[0] = pegboardOrigin.X;
