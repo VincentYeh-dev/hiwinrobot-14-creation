@@ -28,16 +28,15 @@ namespace PerlerBeads
                                                     PointF oriPoint,
                                                     PointF? centerPoint = null)
         {
-            var rotationMatrix = new Matrix<double>(2, 3);
-            CvInvoke.GetRotationMatrix2D(centerPoint ?? oriPoint, angleDeg, 1, rotationMatrix);
+            var rotationMatrix = new RotationMatrix2D(centerPoint ?? oriPoint, angleDeg, 1);
+            var points = new[]
+            {
+                new PointF(oriPoint.X + offset.X,
+                           oriPoint.Y + offset.Y)
+            };
+            rotationMatrix.RotatePoints(points);
 
-            var oriMatrix = new Matrix<double>(3, 1);
-            oriMatrix[0, 0] = oriPoint.X + offset.X;
-            oriMatrix[1, 0] = oriPoint.Y + offset.Y;
-            oriMatrix[2, 0] = 1;
-
-            var rotatedPoint = rotationMatrix * oriMatrix;
-            return new PointF((float)rotatedPoint[0, 0], (float)rotatedPoint[1, 0]);
+            return points[0];
         }
 
         public static PointF VisualServoing(RoboticArm arm,

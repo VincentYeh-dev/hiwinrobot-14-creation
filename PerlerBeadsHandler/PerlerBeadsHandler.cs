@@ -71,25 +71,30 @@ namespace PerlerBeads
             {
                 for (int y = 0; y < _modelBoard.Size.Height; y++)
                 {
-                    HandleTheBead(new Point(x, y));
+                    var skip = HandleTheBead(new Point(x, y));
+                    if (skip)
+                    {
+                        _messageHanlder.Log($"Bead {x}, {y} skip.", LoggingLevel.Info);
+                    }
                 }
             }
             DisposGripper();
         }
 
-        private void HandleTheBead(Point modelGrid)
+        private bool HandleTheBead(Point modelGrid)
         {
             var modelBead = _modelBoard.GetBead(modelGrid);
             if (modelBead == null)
             {
-                // 不用放。
-                return;
+                // 不用放。Skip
+                return true;
             }
 
             var find = _storeBoard.SearchBy(modelBead.Color, out var storeGrid);
             if (!find)
             {
-                throw new Exception("找不到目標顏色的珠子。");
+                // 找不到目標顏色的珠子。Skip
+                return true;
             }
 
             var r = _messageHanlder.Show($"將要抓放珠子-{modelBead.Color.Name}。", "Info", MessageBoxButtons.OKCancel, MessageBoxIcon.None, LoggingLevel.Info);
@@ -103,14 +108,14 @@ namespace PerlerBeads
 
             _messageHanlder.Log($"執行：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
 
-            //PickBead(storeGrid);
-            TakeBeadTest();
+            TakeBeadTest(); // For testing.
             _storeBoard.RemoveBead(storeGrid);
 
             PutBead(modelGrid);
             _goalBoard.PutBead(modelGrid, modelBead, true);
 
             _messageHanlder.Log($"完成：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
+            return false;
         }
 
         private void TakeBeadTest()

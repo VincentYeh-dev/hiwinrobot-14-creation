@@ -44,13 +44,11 @@ namespace hiwinrobot_14_creation
 
         #region Variables
 
+        private readonly double _mmPerPixel = (20.0 / 130.0);
         private readonly string _armIp = @"192.168.0.1";
-
-        private PointF _worldOffset = new PointF(0, -50);
-
-        private float _distanceOfCameraAndEndEffector = 110;
-
-        private int _armInitSpeed = 20;
+        private readonly int _armInitSpeed = 20;
+        private PointF _cameraAndEndEffectorOffset => new PointF(0, 110);
+        private PointF _worldOffset => new PointF(0, -50);
 
         #region Positions
 
@@ -110,20 +108,23 @@ namespace hiwinrobot_14_creation
             var arucoId = 1;
             var timeout = 20;
             var allowableError = 4;
-            var kp = (20.0 / 130.0) * 0.8; // mm per pixel * gain.
+            var kp = _mmPerPixel * 0.8; // mm per pixel * gain.
 
             var error = VisualSystem.VisualServoing(_arm, _camera, kp, allowableError, timeout, arucoId);
 
             var image = _camera.GetImage();
             image.Save("visual_servoing_done.jpg");
 
+            // Calc the angle of ArUco.
             var arucoCorners = VisualSystem.FindArucoCorners(image.ToImage<Bgr, byte>(), arucoId);
             var arucoAngle = VisualSystem.CalcArucoAngle(arucoCorners);
 
             var presentPosition = _arm.GetNowPosition();
             var presentPoint = new PointF((float)presentPosition[0], (float)presentPosition[1]);
-            var centerPoint = new PointF(presentPoint.X, presentPoint.Y + _distanceOfCameraAndEndEffector);
+            var centerPoint = new PointF(presentPoint.X + _cameraAndEndEffectorOffset.X,
+                                         presentPoint.Y + _cameraAndEndEffectorOffset.Y);
 
+            // Rotation.
             var pegboardOrigin = VisualSystem.CalcPositionWithOffset(-arucoAngle, _worldOffset, presentPoint, centerPoint);
             _pegboardOriginPosition = _capturePosition;
             _pegboardOriginPosition[0] = pegboardOrigin.X;
