@@ -108,8 +108,7 @@ namespace PerlerBeads
 
             _messageHanlder.Log($"執行：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
 
-            //PickBead(storeGrid);
-            TakeBeadTest();
+            TakeBeadTest(); // For testing.
             _storeBoard.RemoveBead(storeGrid);
 
             PutBead(modelGrid);
