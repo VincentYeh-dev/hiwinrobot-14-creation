@@ -46,8 +46,8 @@ namespace hiwinrobot_14_creation
 
         private readonly string _armIp = @"192.168.0.1";
         private readonly int _armInitSpeed = 20;
-        private PointF _cameraAndEndEffectorOffset = new PointF(0, 110);
-        private PointF _worldOffset = new PointF(0, -50);
+        private PointF _cameraAndEndEffectorOffset => new PointF(0, 110);
+        private PointF _worldOffset => new PointF(0, -50);
 
         #region Positions
 
