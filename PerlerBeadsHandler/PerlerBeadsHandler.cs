@@ -34,7 +34,9 @@ namespace PerlerBeads
 
         private readonly Hiwin.RoboticArm _arm;
         private readonly double _pickUpperZ = -40;
-        private readonly double _pickDownZ = -10;
+        private readonly double _pickLowerZ=-55.5;
+
+        private readonly double _putDownZ = -10;
 
         private readonly MessageHandler _messageHanlder;
 
@@ -54,7 +56,7 @@ namespace PerlerBeads
                 Position = new PointF(-131.480f, 600.619f)
             };
 
-            _storeBoard = _modelBoard;
+            _storeBoard = PegBoardFactory.Make("storeboard.csv",out _);
             _storeBoard.Position = _goalBoard.Position;
             _storeBoard.Position.X += Pegboard.X_GridLength* (_goalBoard.Size.Width);
 
@@ -64,6 +66,7 @@ namespace PerlerBeads
 
         public void Run()
         {
+            var dict=_modelBoard.BeadColorCount();
             CloseGripper();
             OpenGripper();
 
@@ -81,10 +84,10 @@ namespace PerlerBeads
             DisposGripper();
         }
 
-        public void CheckYGridLength()
+        public void CheckGoalYGridLength()
         {
             CloseGripper();
-            for (int y = 0; y < _modelBoard.Size.Height; y++)
+            for (int y = 0; y < _goalBoard.Size.Height; y++)
             {
 
                 var position = _goalBoard.GetRealPosition(new Point(0, y));
@@ -97,10 +100,10 @@ namespace PerlerBeads
             }
         }
 
-        public void CheckXGridLength()
+        public void CheckGoalXGridLength()
         {
             CloseGripper();
-            for (int x = 0; x < _modelBoard.Size.Width; x++)
+            for (int x = 0; x < _goalBoard.Size.Width; x++)
             {
                 var position = _goalBoard.GetRealPosition(new Point(x, 0));
                 var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
@@ -111,6 +114,37 @@ namespace PerlerBeads
                 Thread.Sleep(1000);
             }
         }
+        public void CheckStoreYGridLength()
+        {
+            CloseGripper();
+            for (int y = 0; y < _storeBoard.Size.Height; y++)
+            {
+
+                var position = _storeBoard.GetRealPosition(new Point(0, y));
+                var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
+                goalPosition[0] = position.X;
+                goalPosition[1] = position.Y;
+                goalPosition[2] = -55;
+                _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
+                Thread.Sleep(1000);
+            }
+        }
+
+        public void CheckStoreXGridLength()
+        {
+            CloseGripper();
+            for (int x = 0; x < _storeBoard.Size.Width; x++)
+            {
+                var position = _storeBoard.GetRealPosition(new Point(x, 0));
+                var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
+                goalPosition[0] = position.X;
+                goalPosition[1] = position.Y;
+                goalPosition[2] = -55;
+                _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
+                Thread.Sleep(1000);
+            }
+        }
+
         private bool HandleTheBead(Point modelGrid)
         {
             var modelBead = _modelBoard.GetBead(modelGrid);
@@ -127,18 +161,19 @@ namespace PerlerBeads
                 return true;
             }
 
-            var r = _messageHanlder.Show($"將要抓放珠子-{modelBead.Color.Name}。", "Info", MessageBoxButtons.OKCancel, MessageBoxIcon.None, LoggingLevel.Info);
-            if (r != DialogResult.OK)
-            {
-                OpenGripper();
-                DisposGripper();
-                _arm.Disconnect();
-                throw new Exception("Abort.");
-            }
+            //var r = _messageHanlder.Show($"將要抓放珠子-{modelBead.Color.Name}。", "Info", MessageBoxButtons.OKCancel, MessageBoxIcon.None, LoggingLevel.Info);
+            //if (r != DialogResult.OK)
+            //{
+            //    OpenGripper();
+            //    DisposGripper();
+            //    _arm.Disconnect();
+            //    throw new Exception("Abort.");
+            //}
 
             _messageHanlder.Log($"執行：{modelGrid.X},{modelGrid.Y};{modelBead.Color.Name}。", LoggingLevel.Trace);
 
-            TakeBeadTest(); // For testing.
+            //TakeBeadTest(); // For testing.
+            TakeBead(storeGrid);
             _storeBoard.RemoveBead(storeGrid);
 
             PutBead(modelGrid);
@@ -180,18 +215,13 @@ namespace PerlerBeads
             OpenGripper();
             _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
 
-            // Move to lower.
-            var mp = new MotionParam
-            {
-                CoordinateType = CoordinateType.Descartes,
-                MotionType = MotionType.Linear,
-                NeedWait = true
-            };
-            _arm.MoveRelative(0, 0, _pickDownZ, 0, 0, 0, mp);
+            goalPosition[2] = _pickLowerZ;
+            _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
             CloseGripper();
 
+            goalPosition[2] = _pickUpperZ;
             // Back to upper.
-            _arm.MoveRelative(0, 0, -_pickDownZ, 0, 0, 0, mp);
+            _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
         }
 
         private void PutBead(Point grid)
@@ -214,12 +244,12 @@ namespace PerlerBeads
                 MotionType = MotionType.Linear,
                 NeedWait = true
             };
-            _arm.MoveRelative(0, 0, _pickDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, _putDownZ, 0, 0, 0, mp);
             OpenGripper();
 
             // Back to upper.
             //_messageHanlder.Show("Upping.");
-            _arm.MoveRelative(0, 0, -_pickDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, -_putDownZ, 0, 0, 0, mp);
         }
 
         private void CloseGripper()

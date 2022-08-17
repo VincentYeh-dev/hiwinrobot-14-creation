@@ -38,8 +38,10 @@ namespace hiwinrobot_14_creation
             _actions.Add("ABORT", () => { /* Do nothing. */ });
             _actions.Add("Close Camera", CameraDisconnect);
             _actions.Add("進行拼豆", CreatePerlerBeads);
-            _actions.Add("檢查Y間隔長度", CheckYGirdLength);
-            _actions.Add("檢查X間隔長度", CheckXGirdLength);
+            _actions.Add("檢查目標板Y間隔長度", () => { _beadsHandler.CheckGoalYGridLength(); });
+            _actions.Add("檢查目標板X間隔長度", () => { _beadsHandler.CheckGoalXGridLength(); });
+            _actions.Add("檢查儲存板Y間隔長度", () => { _beadsHandler.CheckStoreYGridLength(); });
+            _actions.Add("檢查儲存板X間隔長度", () => { _beadsHandler.CheckStoreXGridLength(); });
 
             _actions.Add("End", () => _messageHandler.Show("所有動作已結束。"));
         }
@@ -144,14 +146,6 @@ namespace hiwinrobot_14_creation
             _messageHandler.Log($"開始進行拼豆。", LoggingLevel.Trace);
             _beadsHandler.Run();
             _messageHandler.Log($"拼豆完成。", LoggingLevel.Trace);
-        }
-        private void CheckXGirdLength()
-        {
-            _beadsHandler.CheckXGridLength();
-        }
-        private void CheckYGirdLength()
-        {
-            _beadsHandler.CheckYGridLength();
         }
     }
 }
