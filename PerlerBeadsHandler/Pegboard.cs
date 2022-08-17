@@ -9,7 +9,8 @@ namespace PerlerBeads
 {
     public class Pegboard
     {
-        public const float GridLength = 4.95f;
+        public const float X_GridLength = 5f;
+        public const float Y_GridLength = 5f;
 
         public readonly Size Size;
 
@@ -105,7 +106,7 @@ namespace PerlerBeads
 
         public PointF GetRealPosition(Point grid, out Bead bead)
         {
-            var realGrid = new PointF(GridLength * grid.X, GridLength * grid.Y);
+            var realGrid = new PointF(X_GridLength* grid.X, Y_GridLength * grid.Y);
             var realPosition = Position;
             realPosition.X += realGrid.X;
             realPosition.Y -= realGrid.Y;

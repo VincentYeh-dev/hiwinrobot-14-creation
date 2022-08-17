@@ -34,7 +34,7 @@ namespace PerlerBeads
 
         private readonly Hiwin.RoboticArm _arm;
         private readonly double _pickUpperZ = -40;
-        private readonly double _putDownZ = -10;
+        private readonly double _pickDownZ = -10;
 
         private readonly MessageHandler _messageHanlder;
 
@@ -56,7 +56,7 @@ namespace PerlerBeads
 
             _storeBoard = _modelBoard;
             _storeBoard.Position = _goalBoard.Position;
-            _storeBoard.Position.X += Pegboard.GridLength * _goalBoard.Size.Width;
+            _storeBoard.Position.X += Pegboard.X_GridLength* (_goalBoard.Size.Width);
 
             _arm = arm;
             _messageHanlder = messageHandler;
@@ -81,6 +81,36 @@ namespace PerlerBeads
             DisposGripper();
         }
 
+        public void CheckYGridLength()
+        {
+            CloseGripper();
+            for (int y = 0; y < _modelBoard.Size.Height; y++)
+            {
+
+                var position = _goalBoard.GetRealPosition(new Point(0, y));
+                var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
+                goalPosition[0] = position.X;
+                goalPosition[1] = position.Y;
+                goalPosition[2] = -55;
+                _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
+                Thread.Sleep(1000);
+            }
+        }
+
+        public void CheckXGridLength()
+        {
+            CloseGripper();
+            for (int x = 0; x < _modelBoard.Size.Width; x++)
+            {
+                var position = _goalBoard.GetRealPosition(new Point(x, 0));
+                var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
+                goalPosition[0] = position.X;
+                goalPosition[1] = position.Y;
+                goalPosition[2] = -55;
+                _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
+                Thread.Sleep(1000);
+            }
+        }
         private bool HandleTheBead(Point modelGrid)
         {
             var modelBead = _modelBoard.GetBead(modelGrid);
@@ -142,8 +172,8 @@ namespace PerlerBeads
             var beadRealPos = _storeBoard.GetRealPosition(grid);
 
             var goalPosition = (double[])Hiwin.Default.DescartesHomePosition.Clone();
-            goalPosition[0] = beadRealPos.X + grid.X;
-            goalPosition[1] = beadRealPos.Y + grid.Y;
+            goalPosition[0] = beadRealPos.X;
+            goalPosition[1] = beadRealPos.Y;
             goalPosition[2] = _pickUpperZ;
 
             // Move to upper.
@@ -157,11 +187,11 @@ namespace PerlerBeads
                 MotionType = MotionType.Linear,
                 NeedWait = true
             };
-            _arm.MoveRelative(0, 0, _putDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, _pickDownZ, 0, 0, 0, mp);
             CloseGripper();
 
             // Back to upper.
-            _arm.MoveRelative(0, 0, -_putDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, -_pickDownZ, 0, 0, 0, mp);
         }
 
         private void PutBead(Point grid)
@@ -184,12 +214,12 @@ namespace PerlerBeads
                 MotionType = MotionType.Linear,
                 NeedWait = true
             };
-            _arm.MoveRelative(0, 0, _putDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, _pickDownZ, 0, 0, 0, mp);
             OpenGripper();
 
             // Back to upper.
             //_messageHanlder.Show("Upping.");
-            _arm.MoveRelative(0, 0, -_putDownZ, 0, 0, 0, mp);
+            _arm.MoveRelative(0, 0, -_pickDownZ, 0, 0, 0, mp);
         }
 
         private void CloseGripper()
