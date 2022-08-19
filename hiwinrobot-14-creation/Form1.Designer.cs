@@ -38,15 +38,17 @@
             this.buttonActionRunAll = new System.Windows.Forms.Button();
             this.buttonActionRunSelected = new System.Windows.Forms.Button();
             this.buttonActionDoOnce = new System.Windows.Forms.Button();
+            this.roiSelectUserControl1 = new hiwinrobot_14_creation.ui.components.ROISelectUserControl();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonConnect
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(6, 24);
+            this.buttonConnect.Location = new System.Drawing.Point(7, 29);
+            this.buttonConnect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(102, 23);
+            this.buttonConnect.Size = new System.Drawing.Size(115, 28);
             this.buttonConnect.TabIndex = 0;
             this.buttonConnect.Text = "Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
@@ -54,9 +56,10 @@
             // 
             // buttonDisconnect
             // 
-            this.buttonDisconnect.Location = new System.Drawing.Point(6, 53);
+            this.buttonDisconnect.Location = new System.Drawing.Point(7, 64);
+            this.buttonDisconnect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonDisconnect.Name = "buttonDisconnect";
-            this.buttonDisconnect.Size = new System.Drawing.Size(102, 23);
+            this.buttonDisconnect.Size = new System.Drawing.Size(115, 28);
             this.buttonDisconnect.TabIndex = 0;
             this.buttonDisconnect.Text = "Disconnect";
             this.buttonDisconnect.UseVisualStyleBackColor = true;
@@ -66,9 +69,11 @@
             // 
             this.groupBox1.Controls.Add(this.buttonConnect);
             this.groupBox1.Controls.Add(this.buttonDisconnect);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(14, 14);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(115, 85);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Size = new System.Drawing.Size(129, 102);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connection";
@@ -81,9 +86,10 @@
             this.listViewActions.FullRowSelect = true;
             this.listViewActions.GridLines = true;
             this.listViewActions.HideSelection = false;
-            this.listViewActions.Location = new System.Drawing.Point(6, 24);
+            this.listViewActions.Location = new System.Drawing.Point(7, 29);
+            this.listViewActions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listViewActions.Name = "listViewActions";
-            this.listViewActions.Size = new System.Drawing.Size(357, 273);
+            this.listViewActions.Size = new System.Drawing.Size(401, 327);
             this.listViewActions.TabIndex = 2;
             this.listViewActions.UseCompatibleStateImageBehavior = false;
             this.listViewActions.View = System.Windows.Forms.View.Details;
@@ -104,18 +110,21 @@
             this.groupBox2.Controls.Add(this.buttonActionRunSelected);
             this.groupBox2.Controls.Add(this.buttonActionDoOnce);
             this.groupBox2.Controls.Add(this.listViewActions);
-            this.groupBox2.Location = new System.Drawing.Point(133, 12);
+            this.groupBox2.Location = new System.Drawing.Point(150, 14);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(372, 344);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox2.Size = new System.Drawing.Size(418, 413);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Action";
             // 
             // buttonActionRunAll
             // 
-            this.buttonActionRunAll.Location = new System.Drawing.Point(6, 303);
+            this.buttonActionRunAll.Location = new System.Drawing.Point(7, 364);
+            this.buttonActionRunAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonActionRunAll.Name = "buttonActionRunAll";
-            this.buttonActionRunAll.Size = new System.Drawing.Size(115, 30);
+            this.buttonActionRunAll.Size = new System.Drawing.Size(129, 36);
             this.buttonActionRunAll.TabIndex = 3;
             this.buttonActionRunAll.Text = "Run All";
             this.buttonActionRunAll.UseVisualStyleBackColor = true;
@@ -123,9 +132,10 @@
             // 
             // buttonActionRunSelected
             // 
-            this.buttonActionRunSelected.Location = new System.Drawing.Point(127, 303);
+            this.buttonActionRunSelected.Location = new System.Drawing.Point(143, 364);
+            this.buttonActionRunSelected.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonActionRunSelected.Name = "buttonActionRunSelected";
-            this.buttonActionRunSelected.Size = new System.Drawing.Size(115, 30);
+            this.buttonActionRunSelected.Size = new System.Drawing.Size(129, 36);
             this.buttonActionRunSelected.TabIndex = 3;
             this.buttonActionRunSelected.Text = "Run Selected";
             this.buttonActionRunSelected.UseVisualStyleBackColor = true;
@@ -133,21 +143,31 @@
             // 
             // buttonActionDoOnce
             // 
-            this.buttonActionDoOnce.Location = new System.Drawing.Point(248, 303);
+            this.buttonActionDoOnce.Location = new System.Drawing.Point(279, 364);
+            this.buttonActionDoOnce.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonActionDoOnce.Name = "buttonActionDoOnce";
-            this.buttonActionDoOnce.Size = new System.Drawing.Size(115, 30);
+            this.buttonActionDoOnce.Size = new System.Drawing.Size(129, 36);
             this.buttonActionDoOnce.TabIndex = 3;
             this.buttonActionDoOnce.Text = "Do Once";
             this.buttonActionDoOnce.UseVisualStyleBackColor = true;
             this.buttonActionDoOnce.Click += new System.EventHandler(this.buttonActionDoOnce_Click);
             // 
+            // roiSelectUserControl1
+            // 
+            this.roiSelectUserControl1.Location = new System.Drawing.Point(584, 43);
+            this.roiSelectUserControl1.Name = "roiSelectUserControl1";
+            this.roiSelectUserControl1.Size = new System.Drawing.Size(793, 586);
+            this.roiSelectUserControl1.TabIndex = 4;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1334, 683);
+            this.ClientSize = new System.Drawing.Size(1501, 820);
+            this.Controls.Add(this.roiSelectUserControl1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "HIWIN-14屆：智慧創作";
             this.groupBox1.ResumeLayout(false);
@@ -168,6 +188,7 @@
         private System.Windows.Forms.Button buttonActionDoOnce;
         private System.Windows.Forms.Button buttonActionRunAll;
         private System.Windows.Forms.Button buttonActionRunSelected;
+        private ui.components.ROISelectUserControl roiSelectUserControl1;
     }
 }
 

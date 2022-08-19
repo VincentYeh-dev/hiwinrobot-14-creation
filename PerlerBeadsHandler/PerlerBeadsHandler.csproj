@@ -38,16 +38,16 @@
       <HintPath>..\packages\Emgu.CV.4.5.5.4823\lib\netstandard2.0\Emgu.CV.Platform.NetStandard.dll</HintPath>
     </Reference>
     <Reference Include="RASDK.Arm, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9-alpha.1\lib\net472\RASDK.Arm.dll</HintPath>
+      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9\lib\net472\RASDK.Arm.dll</HintPath>
     </Reference>
     <Reference Include="RASDK.Basic, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9-alpha.1\lib\net472\RASDK.Basic.dll</HintPath>
+      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9\lib\net472\RASDK.Basic.dll</HintPath>
     </Reference>
     <Reference Include="RASDK.Gripper, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9-alpha.1\lib\net472\RASDK.Gripper.dll</HintPath>
+      <HintPath>..\packages\NFUIRSL.RASDK.0.3.9\lib\net472\RASDK.Gripper.dll</HintPath>
     </Reference>
     <Reference Include="RASDK.Vision, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\NFUIRSL.RASDK.Vision.0.2.0-beta.4\lib\net472\RASDK.Vision.dll</HintPath>
+      <HintPath>..\packages\NFUIRSL.RASDK.Vision.0.2.0\lib\net472\RASDK.Vision.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

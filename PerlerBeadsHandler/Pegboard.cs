@@ -9,7 +9,8 @@ namespace PerlerBeads
 {
     public class Pegboard
     {
-        public const float GridLength = 4.95f;
+        public const float X_GridLength = 5f;
+        public const float Y_GridLength = 5f;
 
         public readonly Size Size;
 
@@ -105,13 +106,42 @@ namespace PerlerBeads
 
         public PointF GetRealPosition(Point grid, out Bead bead)
         {
-            var realGrid = new PointF(GridLength * grid.X, GridLength * grid.Y);
+            var realGrid = new PointF(X_GridLength* grid.X, Y_GridLength * grid.Y);
             var realPosition = Position;
             realPosition.X += realGrid.X;
             realPosition.Y -= realGrid.Y;
 
             bead = GetBead(grid);
             return realPosition;
+        }
+        public Dictionary<Color,int> BeadColorCount()
+        {
+            var dictionary=new Dictionary<Color, int[]>();
+            for(int row = 0; row < Size.Height; row++)
+            {
+                for(int column = 0; column < Size.Width; column++)
+                {
+                    var bead = GetBead(column,row);
+                    if (bead == null)
+                        continue;
+                    if (!dictionary.ContainsKey(bead.Color))
+                    {
+                        dictionary.Add(bead.Color,new int[] {1});
+                    }
+                    else
+                    {
+                        dictionary.TryGetValue(bead.Color,out var ints);
+                        ints[0]++;
+                    }
+                }
+            }
+            var dictionary_2=new Dictionary<Color, int>();
+            foreach(var key in dictionary.Keys)
+            {
+                dictionary.TryGetValue(key,out var ints);
+                dictionary_2.Add(key, ints[0]);
+            }
+            return dictionary_2;
         }
 
         public bool IsAlreadyExistsBead(Point grid)
