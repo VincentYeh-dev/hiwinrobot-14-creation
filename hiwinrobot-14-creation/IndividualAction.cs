@@ -17,6 +17,8 @@ using Emgu.CV.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using System.Drawing;
+using System.Threading;
+using hiwinrobot_14_creation.ui.components;
 
 namespace hiwinrobot_14_creation
 {
@@ -31,6 +33,7 @@ namespace hiwinrobot_14_creation
 
             _actions.Add("Homing", () => _arm.Homing());
             _actions.Add("Open Camera", CameraConnect);
+            _actions.Add("針板位置校正", StartCameraPositioning);
             _actions.Add("移動到相機標定的位置", MoveToCapture);
             _actions.Add("Visual Servoing", VisualServoing);
             _actions.Add("移動到針板原點", MoveToPegboardOrigin);
@@ -146,6 +149,20 @@ namespace hiwinrobot_14_creation
             _messageHandler.Log($"開始進行拼豆。", LoggingLevel.Trace);
             _beadsHandler.Run();
             _messageHandler.Log($"拼豆完成。", LoggingLevel.Trace);
+        }
+
+        private void StartCameraPositioning()
+        {
+            var form = new PositioningForm();
+            form.SetGetImage(()=>{
+                return _camera.GetImage();
+            });
+            form.Delay = 50;
+            form.ROI = new Rectangle(100,100,100,100);
+            form.Start();
+            form.Show();
+            //System.Windows.Forms.FormClosedEventHandler value = () => { };
+            //form.FormClosed += value;
         }
     }
 }
