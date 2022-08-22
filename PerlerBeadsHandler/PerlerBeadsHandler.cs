@@ -84,7 +84,17 @@ namespace PerlerBeads
             DisposGripper();
         }
 
-        public void CheckGoalYGridLength()
+        public void MoveToOrigin(double z)
+        {
+            var position = _goalBoard.GetRealPosition(new Point(0, 0));
+            var goalPosition = Hiwin.Default.DescartesHomePosition;
+            goalPosition[0] = position.X;
+            goalPosition[1] = position.Y;
+            goalPosition[2] = z;
+            _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
+        }
+
+        public void CheckGoalYGridLength(double z)
         {
             CloseGripper();
             for (int y = 0; y < _goalBoard.Size.Height; y++)
@@ -94,13 +104,13 @@ namespace PerlerBeads
                 var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
                 goalPosition[0] = position.X;
                 goalPosition[1] = position.Y;
-                goalPosition[2] = -55;
+                goalPosition[2] = z;
                 _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
                 Thread.Sleep(1000);
             }
         }
 
-        public void CheckGoalXGridLength()
+        public void CheckGoalXGridLength(double z)
         {
             CloseGripper();
             for (int x = 0; x < _goalBoard.Size.Width; x++)
@@ -109,12 +119,12 @@ namespace PerlerBeads
                 var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
                 goalPosition[0] = position.X;
                 goalPosition[1] = position.Y;
-                goalPosition[2] = -55;
+                goalPosition[2] = z;
                 _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
                 Thread.Sleep(1000);
             }
         }
-        public void CheckStoreYGridLength()
+        public void CheckStoreYGridLength(double z)
         {
             CloseGripper();
             for (int y = 0; y < _storeBoard.Size.Height; y++)
@@ -124,13 +134,13 @@ namespace PerlerBeads
                 var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
                 goalPosition[0] = position.X;
                 goalPosition[1] = position.Y;
-                goalPosition[2] = -55;
+                goalPosition[2] = z;
                 _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
                 Thread.Sleep(1000);
             }
         }
 
-        public void CheckStoreXGridLength()
+        public void CheckStoreXGridLength(double z)
         {
             CloseGripper();
             for (int x = 0; x < _storeBoard.Size.Width; x++)
@@ -139,7 +149,7 @@ namespace PerlerBeads
                 var goalPosition = Hiwin.Default.DescartesHomePosition.Clone() as double[];
                 goalPosition[0] = position.X;
                 goalPosition[1] = position.Y;
-                goalPosition[2] = -55;
+                goalPosition[2] = z;
                 _arm.MoveAbsolute(goalPosition, _defauleMotionParam);
                 Thread.Sleep(1000);
             }

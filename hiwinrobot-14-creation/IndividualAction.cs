@@ -32,21 +32,28 @@ namespace hiwinrobot_14_creation
             _actions.Add("Test", () => _messageHandler.Show("Test action."));
 
             _actions.Add("Homing", () => _arm.Homing());
-            _actions.Add("Open Camera", CameraConnect);
-            _actions.Add("針板位置校正", StartCameraPositioning);
-            _actions.Add("移動到相機標定的位置", MoveToCapture);
-            _actions.Add("Visual Servoing", VisualServoing);
-            _actions.Add("移動到針板原點", MoveToPegboardOrigin);
-            _actions.Add("Down", MoveDown);
-            _actions.Add("ABORT", () => { /* Do nothing. */ });
-            _actions.Add("Close Camera", CameraDisconnect);
-            _actions.Add("進行拼豆", CreatePerlerBeads);
-            _actions.Add("檢查目標板Y間隔長度", () => { _beadsHandler.CheckGoalYGridLength(); });
-            _actions.Add("檢查目標板X間隔長度", () => { _beadsHandler.CheckGoalXGridLength(); });
-            _actions.Add("檢查儲存板Y間隔長度", () => { _beadsHandler.CheckStoreYGridLength(); });
-            _actions.Add("檢查儲存板X間隔長度", () => { _beadsHandler.CheckStoreXGridLength(); });
+            //_actions.Add("ABORT", () => { /* Do nothing. */ });
+            //_actions.Add("Open Camera", CameraConnect);
+            //_actions.Add("針板位置校正", StartCameraPositioning);
+            //_actions.Add("移動到相機標定的位置", MoveToCapture);
+            //_actions.Add("Visual Servoing", VisualServoing);
 
-            _actions.Add("End", () => _messageHandler.Show("所有動作已結束。"));
+            //_actions.Add("Close Camera", CameraDisconnect);
+            _actions.Add("!進行拼豆", CreatePerlerBeads);
+            _actions.Add("ABORT", () => { /* Do nothing. */ });
+
+            _actions.Add("移動到針板原點", () => _beadsHandler.MoveToOrigin(200));
+            _actions.Add("Down Z:0", ()=>MoveDown(0));
+            _actions.Add("Down Z:-20", () => MoveDown(-20));
+            _actions.Add("Down Z:-40", () => MoveDown(-40));
+            _actions.Add("Down Z:-50", () => MoveDown(-50));
+            //_actions.Add("ABORT", () => { /* Do nothing. */ });
+
+            _actions.Add("檢查目標板Y間隔長度", () => { _beadsHandler.CheckGoalYGridLength(-55); });
+            _actions.Add("檢查目標板X間隔長度", () => { _beadsHandler.CheckGoalXGridLength(-55); });
+            _actions.Add("檢查儲存板Y間隔長度", () => { _beadsHandler.CheckStoreYGridLength(-55); });
+            _actions.Add("檢查儲存板X間隔長度", () => { _beadsHandler.CheckStoreXGridLength(-55); });
+            //_actions.Add("ABORT", () => { /* Do nothing. */ });
         }
 
         #region Variables
@@ -87,10 +94,10 @@ namespace hiwinrobot_14_creation
             _arm.MoveAbsolute(_pegboardOriginPosition);
         }
 
-        private void MoveDown()
+        private void MoveDown(double z)
         {
             var pos = _pegboardOriginPosition.Clone() as double[];
-            pos[2] = 5;
+            pos[2] = z;
             _arm.MoveAbsolute(pos, new MotionParam { MotionType = RASDK.Arm.Type.MotionType.Linear });
         }
 
